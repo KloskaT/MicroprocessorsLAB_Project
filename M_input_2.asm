@@ -5,7 +5,7 @@
 	extern  LCD_Setup, LCD_Write_Message, LCD_clear, LCD_move,LCD_delay_ms,LCD_Send_Byte_D,LCD_shiftright,LCD_delay_x4us	; external LCD subroutines
 	extern	Pad_Setup, Pad_Read, sampling_delay_input
 	
-	global	Input_store2, Store_Input_2_Setup
+	global	Input_store2, Store_Input_2_Setup, Storage_Clear2
 	;global  in2_storage_low,in2_storage_high,in2_storage_highest,first_storage_low,first_storage_high,first_storage_highest,last_storage_low,last_storage_high,last_storage_highest  
 	
 acs0	udata_acs   ; reserve data space in access ram
@@ -124,11 +124,11 @@ File_check2
     
 Storage_Clear2
    movlw	0xE8
-   movwf	storage_high
+   movwf	in2_storage_high
    movlw	0x03
-   movwf	storage_highest
+   movwf	in2_storage_highest
    movlw	0x02
-   movwf	storage_low
+   movwf	in2_storage_low
    
    bcf		PORTE, RE1  ;set cs pin low to active so can write
    
@@ -141,11 +141,11 @@ Storage_Clear2
    
    movlw	0x02
    call		SPI_MasterTransmitInput
-   movf		storage_highest, W
+   movf		in2_storage_highest, W
    call		SPI_MasterTransmitInput
-   movf		storage_high, W
+   movf		in2_storage_high, W
    call		SPI_MasterTransmitInput
-   movf		storage_low, W
+   movf		in2_storage_low, W
    call		SPI_MasterTransmitInput
    
    movlw	0x00
@@ -159,13 +159,13 @@ Storage_Clear2
    call		increment_file
    
    movlw	0x00
-   cpfseq	storage_low
+   cpfseq	in2_storage_low
    bra		Storage_Clear2
    movlw	0xD0
-   cpfseq	storage_high
+   cpfseq	in2_storage_high
    bra		Storage_Clear2
    movlw	0x07
-   cpfseq	storage_highest
+   cpfseq	in2_storage_highest
    bra		Storage_Clear2
    return
     

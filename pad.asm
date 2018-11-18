@@ -1,9 +1,9 @@
 #include p18f87k22.inc
     
     global Pad_Setup, Pad_Read, sampling_delay_input, Pad_Check,sampling_delay_output
-    extern  LCD_clear, Input_store, Storage_Clear1
+    extern  LCD_clear, Input_store, Storage_Clear1, Storage_Clear2, Input_store2
     extern storage_low,storage_high,storage_highest,last_storage_low,last_storage_high,last_storage_highest
-    extern  Output_Storage
+    extern  Output_Storage2, Output_Storage1
     
 acs0    udata_acs   ; named variables in access ram
 PAD_cnt_l   res 1   ; reserve 1 byte for variable PAD_cnt_l
@@ -63,7 +63,7 @@ check_if_out
     cpfseq  pad_final
     bra	    check_if_clear
     
-    call    Output_Storage
+    call    Output_Storage1
     movlw   0x02
     movwf   button_pressed
     return
@@ -79,7 +79,7 @@ check_if_in2
     movlw   b'10110111'
     cpfseq  pad_final
     bra	    check_if_out2
-    call    Storage_Input2
+    call    Input_store2
     return
     
 check_if_out2
