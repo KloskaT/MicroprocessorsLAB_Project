@@ -122,4 +122,51 @@ File_check2
     movwf	in2_storage_low
     return
     
+Storage_Clear2
+   movlw	0xE8
+   movwf	storage_high
+   movlw	0x03
+   movwf	storage_highest
+   movlw	0x01
+   movwf	storage_low
+   
+   bcf		PORTE, RE1  ;set cs pin low to active so can write
+   
+   movlw	0x06
+   call		SPI_MasterTransmitInput
+   
+   bsf		PORTE, RE1 
+   
+   bcf		PORTE, RE1
+   
+   movlw	0x02
+   call		SPI_MasterTransmitInput
+   movf		storage_highest, W
+   call		SPI_MasterTransmitInput
+   movf		storage_high, W
+   call		SPI_MasterTransmitInput
+   movf		storage_low, W
+   call		SPI_MasterTransmitInput
+   
+   movlw	0x00
+   call		SPI_MasterTransmitInput
+   movlw	0x00
+   call		SPI_MasterTransmitInput
+   
+   bsf		PORTE, RE1  ;set cs pin high to inactive so cant write
+   
+   call		increment_file	    ;have to increment file  number twice as two bytes written
+   call		increment_file
+   
+   movlw	0x00
+   cpfseq	storage_low
+   bra		Storage_Clear1
+   movlw	0xE8
+   cpfseq	storage_high
+   bra		Storage_Clear1
+   movlw	0x03
+   cpfseq	storage_highest
+   bra		Storage_Clear1
+   return
+    
     end

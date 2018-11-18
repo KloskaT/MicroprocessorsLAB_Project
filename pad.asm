@@ -59,7 +59,7 @@ Pad_Check
     return
     
 check_if_out
-    movlw   b'10110111'
+    movlw   b'01111011'
     cpfseq  pad_final
     bra	    check_if_clear
     
@@ -71,11 +71,30 @@ check_if_out
 check_if_clear
     movlw   b'11101110'	    ;check if c pressed on keypad
     cpfseq  pad_final
-    return
-    
+    bra	    check_if_in2
     call    Storage_Clear1
     return
     
+check_if_in2
+    movlw   b'10110111'
+    cpfseq  pad_final
+    bra	    check_if_out2
+    call    Storage_Input2
+    return
+    
+check_if_out2
+    movlw   b'10111011'
+    cpfseq  pad_final
+    bra	    check_if_clear2
+    call    Output_Storage2
+    return
+    
+check_if_clear2
+    movlw   b'11101101'	    ;check if c pressed on keypad
+    cpfseq  pad_final
+    return
+    call    Storage_Clear2
+    return
     
 PAD_delay_x4us			; delay given in chunks of 4 microsecond in W
     movwf	PAD_cnt_l	; now need to multiply by 16
