@@ -110,7 +110,7 @@ Wait_TransmitInput ; Wait for transmission to complete
     return
     
 File_check1
-    movlw	0x00
+    movlw	0x01
     cpfseq	storage_low
     return
     movlw	0xE8

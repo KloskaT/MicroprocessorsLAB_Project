@@ -120,9 +120,6 @@ Output_Storage
    
    movff	output_storage_high, PORTF
    
-   call		Increment
-   call		Increment
-   
    bsf		PORTE, RE1  ;set cs pin high to inactive so cant write
    
    bcf		PORTD, RD0		;clear RD0/chip select so can write data
@@ -133,6 +130,10 @@ Output_Storage
     
    movf    output_lower, W
    call    SPI_MasterTransmit	
+   
+   call		Increment
+   call		Increment
+   call		File_Check1_Out
    
    bcf	   TRISC, RC4
    bsf	   PORTD, RD0		;set chip select to stop write
@@ -151,6 +152,24 @@ inc_high
 inc_highest   
    infsnz	output_storage_highest, f  ;increment number in highest byte and return
    retlw	0xFF
-   return    
+   return  
+   
+   
+File_Check1_Out
+    movlw	0x01
+    cpfseq	output_storage_low
+    return
+    movlw	0xE8
+    cpfseq	output_storage_high
+    return
+    movlw	0x03
+    cpfseq	output_storage_highest
+    return
+    movlw	0x00
+    movwf	output_storage_highest
+    movwf	output_storage_high
+    movlw	0x01
+    movwf	output_storage_low
+    return
     
     END

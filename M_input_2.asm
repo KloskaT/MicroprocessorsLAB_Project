@@ -29,7 +29,7 @@ Store_Input_2_Setup	    ;setup of serial output
     bsf		PORTA, RA4  ;set WP pin on, write protect on
     bsf		PORTC, RC2  ;set hold pin off so doesnt hold
     
-    movlw	0x01
+    movlw	0x02
     movwf	in2_storage_low
     movlw	0xE8
     movwf	in2_storage_high
@@ -118,7 +118,7 @@ File_check2
     movwf	in2_storage_highest
     movlw	0xE8
     movwf	in2_storage_high
-    movlw	0x01
+    movlw	0x02
     movwf	in2_storage_low
     return
     
@@ -127,7 +127,7 @@ Storage_Clear2
    movwf	storage_high
    movlw	0x03
    movwf	storage_highest
-   movlw	0x01
+   movlw	0x02
    movwf	storage_low
    
    bcf		PORTE, RE1  ;set cs pin low to active so can write
@@ -160,13 +160,13 @@ Storage_Clear2
    
    movlw	0x00
    cpfseq	storage_low
-   bra		Storage_Clear1
-   movlw	0xE8
+   bra		Storage_Clear2
+   movlw	0xD0
    cpfseq	storage_high
-   bra		Storage_Clear1
-   movlw	0x03
+   bra		Storage_Clear2
+   movlw	0x07
    cpfseq	storage_highest
-   bra		Storage_Clear1
+   bra		Storage_Clear2
    return
     
     end
